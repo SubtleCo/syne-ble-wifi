@@ -25,6 +25,7 @@ logger.addHandler(logHandler)
 
 logger.setLevel(logging.DEBUG)
 
+
 def find_adapter(bus):
     """
     Returns the first object that the bluez service has that has a GattManager1 interface
@@ -38,6 +39,7 @@ def find_adapter(bus):
 
     return None
 
+
 class Application(dbus.service.Object):
     """
     org.bluez.GattApplication1 interface implementation
@@ -47,8 +49,6 @@ class Application(dbus.service.Object):
         self.path = "/"
         self.services = []
         dbus.service.Object.__init__(self, bus, self.path)
-
-
 
     def get_path(self):
         return dbus.ObjectPath(self.path)
@@ -235,6 +235,7 @@ class Descriptor(dbus.service.Object):
         logger.info("Default WriteValue called, returning error")
         raise NotSupportedException()
 
+
 class Advertisement(dbus.service.Object):
     PATH_BASE = "/org/bluez/example/advertisement"
 
@@ -324,7 +325,6 @@ class Advertisement(dbus.service.Object):
 AGENT_INTERFACE = "org.bluez.Agent1"
 
 
-
 def ask(prompt):
     try:
         return raw_input(prompt)
@@ -337,11 +337,13 @@ def set_trusted(path):
         bus.get_object("org.bluez", path), "org.freedesktop.DBus.Properties"
     )
     props.Set("org.bluez.Device1", "Trusted", True)
+    logger.info("Setting Trusted")
 
 
 def dev_connect(path):
     dev = dbus.Interface(bus.get_object("org.bluez", path), "org.bluez.Device1")
     dev.Connect()
+    logger.info("Connecting to a device")
 
 
 class Rejected(dbus.DBusException):
@@ -365,6 +367,7 @@ class Agent(dbus.service.Object):
         logger.info("AuthorizeService (%s, %s)" % (device, uuid))
         authorize = ask("Authorize connection (yes/no): ")
         if authorize == "yes":
+            logger.info("Device authorized!!")
             return
         raise Rejected("Connection rejected by user")
 

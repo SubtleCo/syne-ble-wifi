@@ -8,26 +8,16 @@ import dbus.mainloop.glib
 import dbus.service
 
 from ble import (
-    Advertisement,
-    Characteristic,
-    Service,
     Application,
     find_adapter,
-    Descriptor,
     Agent,
 )
 
 from wifi_manager import (
-  WifiAdvertisement,
-  WifiS1Service,
+    WifiAdvertisement,
+    WifiS1Service,
 )
 
-import struct
-import requests
-import array
-import signal
-
-import sys
 
 MainLoop = None
 try:
@@ -78,22 +68,27 @@ class InvalidValueLengthException(dbus.exceptions.DBusException):
 class FailedException(dbus.exceptions.DBusException):
     _dbus_error_name = "org.bluez.Error.Failed"
 
+
 def register_app_cb():
-  logger.info("GATT application registered")
+    logger.info("GATT application registered")
 
 
 def register_app_error_cb(error):
     logger.critical("Failed to register application: " + str(error))
     mainloop.quit()
 
+
 def register_ad_cb():
     logger.info("Advertisement registered")
+
 
 def register_ad_error_cb(error):
     logger.critical("Failed to register advertisement: " + str(error))
     mainloop.quit()
 
+
 AGENT_PATH = "/com/syne/agent"
+
 
 def main():
     global mainloop
@@ -133,7 +128,7 @@ def main():
     agent_manager = dbus.Interface(obj, "org.bluez.AgentManager1")
     agent_manager.RegisterAgent(AGENT_PATH, "NoInputNoOutput")
 
-    logger.info('Unregistering Previous Advertisement...')
+    logger.info("Unregistering Previous Advertisement...")
     # ad_manager.UnregisterAdvertisement(advertisement)
     dbus.service.Object.remove_from_connection(advertisement)
 
@@ -158,11 +153,12 @@ def main():
     logger.info("Turning on Discovery...")
     adapter_props.Set("org.bluez.Adapter1", "Discoverable", dbus.Boolean(1))
 
-    logger.info('Ready')
+    logger.info("Ready")
 
     mainloop.run()
     # ad_manager.UnregisterAdvertisement(advertisement)
     # dbus.service.Object.remove_from_connection(advertisement)
+
 
 # # ----------------------------------------------------------------------
 # def terminate(signum, frame):
