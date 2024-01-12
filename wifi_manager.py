@@ -128,7 +128,7 @@ class WifiCredsCharacteristic(Characteristic):
                 logger.debug("File Written Successfully")
 
             # restart wifi with new credentials
-            subprocess.call(["sudo", "systemctl", "restart", "wpa_supplicant"])
+            subprocess.call(["sudo", "wpa_cli", "-i", "wlan0", "reconfigure"])
 
         except Exception as e:
             logger.error(f"ERRRRRRROR: {e}")
