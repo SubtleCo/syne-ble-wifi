@@ -31,7 +31,7 @@ class WifiAdvertisement(Advertisement):
         )
         self.add_service_uuid(WifiS1Service.WIFI_SVC_UUID)
 
-        self.add_local_name("Wifi")
+        self.add_local_name("Syne Wifi")
         self.include_tx_power = True
 
 
